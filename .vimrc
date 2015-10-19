@@ -54,6 +54,3 @@ nmap ,l :NERDTreeClose<Enter>
 let NERDTreeHighlightCursorline=1
 let NERDTreeIgnore = ['tmp', '.yardoc', 'pkg']
 
-
-" Ctrl-P
-nmap <C-f> :CtrlP<Enter> 
