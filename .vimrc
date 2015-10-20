@@ -24,10 +24,10 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+"
 " Switch between tabs
-nmap tp :tabp<Enter>
-nmap tn :tabn<Enter>
-nmap tw :tabnew<Enter>:e 
+nmap gtp :tabp<Enter>
+nmap gtw :tabnew<Enter>:e 
 " -------------------
 let mapleader=" "
 
