@@ -9,6 +9,7 @@ set ai
 set si
 set incsearch " highlight text while type searching string
 set smartcase " new
+set splitright " when split window, new pane will be on the right side
 filetype off
 
 " Cargo compilation
@@ -16,7 +17,7 @@ map ,cb :! cargo build<Enter>
 map ,cr :! cargo run<Enter>
 map ,cp :! cp ./target/debug/rsignal.dll ../../Programms\ on\ VS\ 2013/COS_Lab2/COS_Lab2/bin/x64/Debug/rsignal.dll<Enter>
 map ,r :! ../../Programms\ on\ VS\ 2013/COS_Lab2/COS_Lab2/bin/x64/Debug/COS_Lab2.exe<Enter>
-map ,t :! ../../Programms\ on\ VS\ 2013/COS_Lab1/WinApp/bin/x64/Debug/WinApp.exe<Enter>
+"map ,t :! ../../Programms\ on\ VS\ 2013/COS_Lab1/WinApp/bin/x64/Debug/WinApp.exe<Enter>
 " ---------------------
 
 " Switch between pannels
@@ -44,6 +45,7 @@ Plugin 'gmarik/Vundle.vim' " Package manager itself
 Plugin 'wting/rust.vim' " Rust syntax hightlighting 
 Plugin 'scrooloose/nerdtree' " Directory tree 
 Plugin 'scrooloose/nerdcommenter' " Plugin that's allow to cooment  
+Plugin 'sjl/gundo.vim' 
 
 call vundle#end()
 filetype plugin indent on
@@ -54,3 +56,5 @@ nmap ,l :NERDTreeClose<Enter>
 let NERDTreeHighlightCursorline=1
 let NERDTreeIgnore = ['tmp', '.yardoc', 'pkg']
 
+" Gundo
+nnoremap <F5> :GundoToggle<CR>
