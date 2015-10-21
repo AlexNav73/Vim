@@ -45,7 +45,7 @@ Plugin 'gmarik/Vundle.vim' " Package manager itself
 Plugin 'wting/rust.vim' " Rust syntax hightlighting 
 Plugin 'scrooloose/nerdtree' " Directory tree 
 Plugin 'scrooloose/nerdcommenter' " Plugin that's allow to cooment  
-Plugin 'sjl/gundo.vim' 
+Plugin 'sjl/gundo.vim' " Undo tree
 
 call vundle#end()
 filetype plugin indent on
