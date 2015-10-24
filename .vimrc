@@ -75,5 +75,6 @@ autocmd VimEnter *.cs call CSSnippensSet()
 function CSSnippensSet()
    " constructor snippet for c# ("ctor"<Space>)
    iab ctor public <C-c>?class<CR>wyw''A<C-r>0()<CR>{<CR>}<C-c>ko
+   iab for for (int i = a; i < a; i++)<CR>{<CR>}<C-c>kkfah
 endfunction
 
