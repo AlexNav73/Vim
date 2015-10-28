@@ -11,6 +11,13 @@ set incsearch " highlight text while type searching string
 set smartcase " new, can be added <set ignorecase>
 set splitright " when split window, new pane will be on the right side
 set nowrap " prevent text wrapping
+set cursorline " enable cursor line highlited 
+set backspace=indent,eol,start " enable delete with backspace existing text
+
+" cterm=bold - remove underline from line
+" cterm=053 - sets highlited line color == 053
+hi CursorLine cterm=bold ctermbg=053
+
 filetype off
 
 " Cargo compilation
@@ -34,6 +41,8 @@ map <C-l> <C-w>l
 nmap gtp :tabp<CR>
 nmap gtw :tabnew<CR>:e 
 " -------------------
+nmap 0 ^
+nmap e ea
 
 let mapleader=" "
 
@@ -47,10 +56,12 @@ set runtimepath^=~/.vim/bundle/ctrlp.vim
 call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim' " Package manager itself 
-Plugin 'wting/rust.vim' " Rust syntax hightlighting 
+Plugin 'rust-lang/rust.vim' " Rust syntax hightlighting 
 Plugin 'scrooloose/nerdtree' " Directory tree 
 Plugin 'scrooloose/nerdcommenter' " Plugin that's allow to cooment  
 Plugin 'sjl/gundo.vim' " Undo tree
+Plugin 'scrooloose/syntastic' " Syntax checker
+Plugin 'bling/vim-airline' " cmdline and tabline bars
 
 call vundle#end()
 filetype plugin indent on
@@ -64,6 +75,14 @@ let NERDTreeIgnore = ['tmp', '.yardoc', 'pkg']
 " Gundo
 nnoremap <F5> :GundoToggle<CR>
 
+" Airlines
+set laststatus=2
+let g:airline_theme='bubblegum'
+let g:airline#extensions#tabline#enabled = 1
+
+" Ctrl-P
+set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe,*.suo,*.sln,*.csproj
+
 " +---------------------------+
 " |                           |
 " |       My functions        |
@@ -74,7 +93,12 @@ autocmd VimEnter *.cs call CSSnippensSet()
 
 function CSSnippensSet()
    " constructor snippet for c# ("ctor"<Space>)
-   iab ctor public <C-c>?class<CR>wyw''A<C-r>0()<CR>{<CR>}<C-c>ko
+   iab ctor public <C-c>?class<CR>wye''A<C-r>0()<CR>{<CR>}<C-c>ko
    iab for for (int i = a; i < a; i++)<CR>{<CR>}<C-c>kkfah
+   iab cons Console.WriteLine();<C-c>hi
+   iab prop public int Prop { get; set; }<C-c>FPviw
+   
+   set tabstop=4
+   set shiftwidth=4
 endfunction
 
