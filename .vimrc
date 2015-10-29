@@ -30,15 +30,22 @@ map ,cp :! cp ./target/debug/rsignal.dll ../../Programms\ on\ VS\ 2013/COS_Lab2/
 map ,r :! ../../Programms\ on\ VS\ 2013/COS_Lab2/COS_Lab2/bin/x64/Debug/COS_Lab2.exe<CR>
 " ---------------------
 
-" Switch between pannels
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
+" Switch between panes
+noremap <C-h> <C-w>h
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
+" -------------------
+" Resize panes with arrow keys
+map OC <C-w><
+map OD <C-w>>
+map OA <C-w>-
+map OB <C-w>+
 " -------------------
 
 " Switch between tabs
 nmap gtp :tabp<CR>
+nmap gtn :tabn<CR>
 nmap gtw :tabnew<CR>:e 
 " -------------------
 nmap 0 ^
@@ -101,4 +108,35 @@ function CSSnippensSet()
    set tabstop=4
    set shiftwidth=4
 endfunction
+
+function ExtractInterface()
+    " Place cursor inside class defenition and :call ExtractInterface()
+    normal ?classVj%ygP?cwinterfacewiIjviB:g/{\n\(get;\|set;\)\@!/:norm diB?interfacejviB:g/;$/dviB:g/{\n\(get;\|set;\)\@!/:norm djviB:g/^$/dviB:s/\((.*)\)/\1;
+
+
+    "normal ?classVj%ygP?cwinterfacewiIjviB:g/\(get\(;\|\ *\(\n\|\).*{\)\|set\(;\|\ *\(\n\|\).*{\)\)\@!/:norm diB?interfacejviB:g/;$/dviB:g/\(get\(;\|\ *\(\n\|\).*{\)\|set\(;\|\ *\(\n\|\).*{\)\)\@!/:norm djviB:g/^$/dviB:s/\((.*)\)/\1;
+
+    "g/\(get\(;\|\ *\(\n\|\).*{\)\|set\(;\|\ *\(\n\|\).*{\)\)/
+    " 1:
+    " {
+    "      get
+    "      {
+    "      }
+    "      set
+    "      {
+    "      }
+    " }
+    " 2:
+    " {
+    "      get { }
+    "      set { }
+    " }
+    " 3:
+    " { get { } set { } }
+endfunction
+
+filetype plugin on
+set omnifunc=syntaxcomplete#Complete
+
+
 
