@@ -18,6 +18,10 @@ set backspace=indent,eol,start " enable delete with backspace existing text
 " cterm=053 - sets highlited line color == 053
 hi CursorLine cterm=bold ctermbg=053
 
+" Set default omni completion for SQL, PHP, JavaScript, CSS, HTML
+filetype plugin on
+set omnifunc=syntaxcomplete#Complete
+
 filetype off
 
 " Cargo compilation
@@ -36,6 +40,7 @@ noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
 " -------------------
+
 " Resize panes with arrow keys
 map OC <C-w><
 map OD <C-w>>
@@ -48,18 +53,17 @@ nmap gtp :tabp<CR>
 nmap gtn :tabn<CR>
 nmap gtw :tabnew<CR>:e 
 " -------------------
+
 nmap 0 ^
 nmap e ea
 
 let mapleader=" "
 
 " set Runtime path to inc Vundle and initialize
-
 set rtp+=~/.vim/bundle/Vundle.vim
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 
 " this is the call to begin the Vundle Plugin Opperation
-
 call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim' " Package manager itself 
@@ -96,7 +100,7 @@ set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe,*.suo,*.sln,*.csproj
 " |                           |
 " +---------------------------+
 
-autocmd VimEnter *.cs call CSSnippensSet()
+autocmd BufRead,BufNewFile *.cs call CSSnippensSet()
 
 function CSSnippensSet()
    " constructor snippet for c# ("ctor"<Space>)
@@ -112,7 +116,6 @@ endfunction
 function ExtractInterface()
     " Place cursor inside class defenition and :call ExtractInterface()
     normal ?classVj%ygP?cwinterfacewiIjviB:g/{\n\(get;\|set;\)\@!/:norm diB?interfacejviB:g/;$/dviB:g/{\n\(get;\|set;\)\@!/:norm djviB:g/^$/dviB:s/\((.*)\)/\1;
-
 
     "normal ?classVj%ygP?cwinterfacewiIjviB:g/\(get\(;\|\ *\(\n\|\).*{\)\|set\(;\|\ *\(\n\|\).*{\)\)\@!/:norm diB?interfacejviB:g/;$/dviB:g/\(get\(;\|\ *\(\n\|\).*{\)\|set\(;\|\ *\(\n\|\).*{\)\)\@!/:norm djviB:g/^$/dviB:s/\((.*)\)/\1;
 
@@ -134,9 +137,4 @@ function ExtractInterface()
     " 3:
     " { get { } set { } }
 endfunction
-
-filetype plugin on
-set omnifunc=syntaxcomplete#Complete
-
-
 
