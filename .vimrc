@@ -90,7 +90,9 @@ let g:airline_theme='bubblegum'
 let g:airline#extensions#tabline#enabled = 1
 
 " Ctrl-P
-set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe,*.suo,*.sln,*.csproj,*.pdb,*.dll,*.cache
+set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe,*.suo,*.sln,*.csproj,*.pdb,*.dll,*.cache,*.config,*.user,*.mdf,*.ldf,*.psm1,*.nupkg,*.psd1,*.manifest,*.ps1,*.transform
+set wildignore+=*.csproj.*
+set wildignore+=*.xml
 
 " +---------------------------+
 " |                           |
@@ -106,7 +108,7 @@ function CSSnippensSet()
    iab ctor public <C-c>?class<CR>wye''A<C-r>0()<CR>{<CR>}<C-c>ko
    iab for for (int i = a; i < a; i++)<CR>{<CR>}<C-c>kkfah
    iab cons Console.WriteLine();<C-c>hi
-   iab prop public int Prop { get; set; }<C-c>FPviw
+   iab prop public TYPE NAME { get; set; }<C-c>FT
 
    set tabstop=4
    set shiftwidth=4
