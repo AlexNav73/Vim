@@ -51,6 +51,12 @@ nmap gtn :tabn<CR>
 nmap gtw :tabnew<CR>:e
 " -------------------
 
+" Move in insert mode
+inoremap II <Esc>I
+inoremap AA <Esc>A
+inoremap OO <Esc>O
+" -------------------
+
 nmap 0 ^
 nmap e ea
 
