@@ -14,6 +14,9 @@ set splitright " when split window, new pane will be on the right side
 set nowrap " prevent text wrapping
 set cursorline " enable cursor line highlighted
 set backspace=indent,eol,start " enable delete with backspace existing text
+set hidden
+
+let mapleader=","
 
 " cterm=bold - remove underline from line
 " cterm=053 - sets highlighted line color == 053
@@ -21,15 +24,17 @@ hi CursorLine cterm=bold ctermbg=053
 
 " Set default omni completion for SQL, PHP, JavaScript, CSS, HTML
 filetype plugin on
-"set omnifunc=syntaxcomplete#Complete
-"setlocal spell spelllang=en_us
+
+" Toggle spell check on and off 
+nmap <silent> <leader>s :set spell!<CR>
+" Open .vimrc in new tab
+nmap <silent> <leader>v :vsp $MYVIMRC<CR>
+" Reselect last selected text (it doesn't care where it is)
+nmap gV `[v`] 
+" Toggle fold (open|close)
+nnoremap <Space> za
 
 filetype off
-
-" Set environment and run programs
-map ,cp :! cp ./target/debug/rsignal.dll ../../Programms\ on\ VS\ 2013/COS_Lab2/COS_Lab2/bin/x64/Debug/rsignal.dll<CR>
-map ,r :! ../../Programms\ on\ VS\ 2013/COS_Lab2/COS_Lab2/bin/x64/Debug/COS_Lab2.exe<CR>
-" ---------------------
 
 " Switch between panes
 noremap <C-h> <C-w>h
@@ -48,7 +53,7 @@ map OB <C-w>+
 " Switch between tabs
 nmap gtp :tabp<CR>
 nmap gtn :tabn<CR>
-nmap gtw :tabnew<CR>:e
+nmap gtw :tabnew<CR>:e 
 " -------------------
 
 " Move in insert mode
@@ -59,8 +64,6 @@ inoremap OO <Esc>O
 
 nmap 0 ^
 nmap e ea
-
-let mapleader=" "
 
 " set Runtime path to inc Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -82,8 +85,8 @@ call vundle#end()
 filetype plugin indent on
 
 " NERDTree
-nmap ,k :NERDTree<CR>
-nmap ,l :NERDTreeClose<CR>
+nmap <leader>k :NERDTree<CR>
+nmap <leader>l :NERDTreeClose<CR>
 let NERDTreeHighlightCursorline=1
 let NERDTreeIgnore = ['tmp', '.yardoc', 'pkg']
 
@@ -108,8 +111,10 @@ set wildignore+=*.xml
 
 autocmd BufRead,BufNewFile *.cs call CSSnippensSet()
 autocmd BufRead,BufNewFile *.rs call SetupRustCompiler()
+" Apply any changes when .vimrc is saved
+autocmd BufWritePost .vimrc source $MYVIMRC
 
-function CSSnippensSet()
+function! CSSnippensSet()
    " constructor snippet for c# ("ctor"<Space>)
    iab ctor public <C-c>?class<CR>wye''A<C-r>0()<CR>{<CR>}<C-c>ko
    iab for for (int i = a; i < a; i++)<CR>{<CR>}<C-c>kkfah
@@ -120,11 +125,11 @@ function CSSnippensSet()
    set shiftwidth=4
 endfunction
 
-function SetupRustCompiler()
+function! SetupRustCompiler()
    compiler cargo
 endfunction
 
-function ExtractInterface()
+function! ExtractInterface()
     " Place cursor inside class definition and :call ExtractInterface()
     normal ?classVj%ygP?cwinterfacewiIjviB:g/{\n\(get;\|set;\)\@!/:norm diB?interfacejviB:g/;$/dviB:g/{\n\(get;\|set;\)\@!/:norm djviB:g/^$/dviB:s/\((.*)\)/\1;
 

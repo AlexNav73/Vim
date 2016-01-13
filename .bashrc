@@ -119,6 +119,7 @@ alias gs='git status'
 alias ga='git add'
 alias gr='git rm --cached'
 alias tr='tree'
+alias exp='explorer'
 
 # Umask
 #
