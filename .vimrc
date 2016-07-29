@@ -15,6 +15,7 @@ set nowrap " prevent text wrapping
 set cursorline " enable cursor line highlighted
 set backspace=indent,eol,start " enable delete with backspace existing text
 set hidden
+set autochdir
 
 let mapleader=","
 
@@ -131,9 +132,23 @@ endfunction
 
 function! ExtractInterface()
     " Place cursor inside class definition and :call ExtractInterface()
-    normal ?classVj%ygP?cwinterfacewiIjviB:g/{\n\(get;\|set;\)\@!/:norm diB?interfacejviB:g/;$/dviB:g/{\n\(get;\|set;\)\@!/:norm djviB:g/^$/dviB:s/\((.*)\)/\1;
+    normal ?class
+Vj%ygP?
+cwinterfacewiIjviB:g/{\n\(get;\|set;\)\@!/:norm diB
+?interface
+jviB:g/;$/d
+viB:g/{\n\(get;\|set;\)\@!/:norm dj
+viB:g/^$/d
+viB:s/\((.*)\)/\1;
 
-    "normal ?classVj%ygP?cwinterfacewiIjviB:g/\(get\(;\|\ *\(\n\|\).*{\)\|set\(;\|\ *\(\n\|\).*{\)\)\@!/:norm diB?interfacejviB:g/;$/dviB:g/\(get\(;\|\ *\(\n\|\).*{\)\|set\(;\|\ *\(\n\|\).*{\)\)\@!/:norm djviB:g/^$/dviB:s/\((.*)\)/\1;
+    "normal ?class
+Vj%ygP?
+cwinterfacewiIjviB:g/\(get\(;\|\ *\(\n\|\).*{\)\|set\(;\|\ *\(\n\|\).*{\)\)\@!/:norm diB
+?interface
+jviB:g/;$/d
+viB:g/\(get\(;\|\ *\(\n\|\).*{\)\|set\(;\|\ *\(\n\|\).*{\)\)\@!/:norm dj
+viB:g/^$/d
+viB:s/\((.*)\)/\1;
     "g/\(get\(;\|\ *\(\n\|\).*{\)\|set\(;\|\ *\(\n\|\).*{\)\)/
     " 1:
     " {
