@@ -119,6 +119,7 @@ function! CSSnippensSet()
    set shiftwidth=4
 
    nnoremap <silent><F7> :Make<CR>
+   nnoremap <silent><F5> :make<CR>:cexpr system(expand("%:r") . ".exe")<CR>:copen<CR>
 endfunction
 
 function! SetupRustCompiler()
