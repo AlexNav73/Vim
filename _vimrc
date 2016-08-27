@@ -80,7 +80,7 @@ Plugin 'tpope/vim-dispatch' " Async `make` command
 call vundle#end()
 filetype plugin indent on
 
-nnoremap <F5> :UndotreeToggle<cr>
+nnoremap <C-F5> :UndotreeToggle<CR>
 
 " NERDTree
 nmap <leader>k :NERDTree<CR>
@@ -110,7 +110,9 @@ function! CSSnippensSet()
    " constructor snippet for c# ("ctor"<Space>)
    iab ctor public <C-c>?class<CR>wye''A<C-r>0()<CR>{<CR>}<C-c>ko
    iab for for (int i = a; i < a; i++)<CR>{<CR>}<C-c>kkfah
+   iab foreach foreach(var ITEM in ITEMS)<CR>{<CR>}<C-c>kkfI
    iab cw Console.WriteLine();<C-c>hi
+   iab cr Console.ReadKey();<C-c>
    iab prop public TYPE NAME { get; set; }<C-c>FT
 
    set tabstop=4
@@ -122,7 +124,7 @@ endfunction
 function! SetupRustCompiler()
    compiler cargo
    nnoremap <silent><F7> :Make build<CR>
-   nnoremap <silent><F8> :make run<CR>:copen<CR>
+   nnoremap <silent><F5> :make run<CR>:copen<CR>
 endfunction
 
 set directory=.,$TEMP
