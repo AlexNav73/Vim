@@ -22,6 +22,7 @@ let mapleader=","
 
 " Set default omni completion for SQL, PHP, JavaScript, CSS, HTML
 filetype plugin on
+set omnifunc=syntaxcomplete#Complete
 
 nmap <silent> <leader>h :set hls!<CR>
 " Toggle spell check on and off 
@@ -80,11 +81,12 @@ Plugin 'tpope/vim-dispatch' " Async `make` command
 call vundle#end()
 filetype plugin indent on
 
+" Undotree
 nnoremap <C-F5> :UndotreeToggle<CR>
 
 " NERDTree
-nmap <leader>k :NERDTree<CR>
-nmap <leader>l :NERDTreeClose<CR>
+nmap <F2> :NERDTree<CR>
+nmap <F3> :NERDTreeClose<CR>
 let NERDTreeHighlightCursorline=1
 let NERDTreeIgnore = ['tmp', '.yardoc', 'pkg']
 
