@@ -69,14 +69,15 @@ filetype off
 " this is the call to begin the Vundle Plugin Opperation
 call vundle#begin('$USERPROFILE/vimfiles/bundle/')
 
-Plugin 'gmarik/Vundle.vim' " Package manager itself
-Plugin 'rust-lang/rust.vim' " Rust syntax highlighting
-Plugin 'scrooloose/nerdtree' " Directory tree
+Plugin 'gmarik/Vundle.vim'        " Package manager itself
+Plugin 'rust-lang/rust.vim'       " Rust syntax highlighting
+Plugin 'scrooloose/nerdtree'      " Directory tree
 Plugin 'scrooloose/nerdcommenter' " Plugin that's allow to comment
-Plugin 'scrooloose/syntastic' " Syntax checker
-Plugin 'kien/ctrlp.vim' " Fuzzy search files
-Plugin 'mbbill/undotree' " Undotree for buffer with diff
-Plugin 'tpope/vim-dispatch' " Async `make` command
+Plugin 'scrooloose/syntastic'     " Syntax checker
+Plugin 'kien/ctrlp.vim'           " Fuzzy search files
+Plugin 'mbbill/undotree'          " Undotree for buffer with diff
+Plugin 'tpope/vim-dispatch'       " Async `make` command
+Plugin 'godlygeek/tabular'        " :Tab /{pattern} to align lines usign {pattern}
 
 call vundle#end()
 filetype plugin indent on
