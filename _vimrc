@@ -78,6 +78,7 @@ Plugin 'kien/ctrlp.vim'           " Fuzzy search files
 Plugin 'mbbill/undotree'          " Undotree for buffer with diff
 Plugin 'tpope/vim-dispatch'       " Async `make` command
 Plugin 'godlygeek/tabular'        " :Tab /{pattern} to align lines usign {pattern}
+Plugin 'tpope/vim-fugitive'       " Git wrapper for Vim
 
 call vundle#end()
 filetype plugin indent on
