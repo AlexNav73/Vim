@@ -1,0 +1,9 @@
+[user]
+	name  = AlexNav73
+	email = fifthhorseman@mail.ru
+[core]
+	editor = vim
+[alias]
+   s   = status
+   pom = push origin master
+   c   = commit -am
