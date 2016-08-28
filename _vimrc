@@ -48,9 +48,9 @@ map <Up> <C-w>-
 " -------------------
 
 " Switch between tabs
-nmap gtp :tabp<CR>
-nmap gtn :tabn<CR>
-nmap gtw :tabnew<CR>
+nmap <leader>tp :tabp<CR>
+nmap <leader>tn :tabn<CR>
+nmap <leader>tw :tabnew<CR>
 " -------------------
 
 nmap e ea
@@ -82,6 +82,12 @@ Plugin 'tpope/vim-fugitive'       " Git wrapper for Vim
 
 call vundle#end()
 filetype plugin indent on
+
+" Fugitive
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gc :Gcommit -a<CR>
+nnoremap <leader>gp :Gpush<CR>
+nnoremap <leader>gd :Gdiff<CR>
 
 " Undotree
 nnoremap <C-F5> :UndotreeToggle<CR>
