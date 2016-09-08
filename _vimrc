@@ -48,11 +48,17 @@ map <Up> <C-w>-
 " -------------------
 
 " Switch between tabs
-nmap <leader>tp :tabp<CR>
-nmap <leader>tn :tabn<CR>
+
+" CTRL-Tab is Next tab
+nnoremap <C-Tab> :tabn<CR>
+" CTRL-Shift-Tab is Previous tab
+nnoremap <C-S-Tab> :tabp<CR>
+" CTRL-F4 is :tabclose
+nnoremap <C-F4> :tabc<CR>
 nmap <leader>tw :tabnew<CR>
 " -------------------
 
+noremap * *N
 nmap e ea
 
 colorscheme evening
