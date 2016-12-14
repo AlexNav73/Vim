@@ -17,6 +17,7 @@ set backspace=indent,eol,start " enable delete with backspace existing text
 set hidden
 set autochdir
 set fileencodings=utf-8,cp1251,cp866,koi8-r
+set lines=50 columns=200
 
 let mapleader=","
 
@@ -48,17 +49,10 @@ map <Up> <C-w>-
 " -------------------
 
 " Switch between tabs
-
-" CTRL-Tab is Next tab
-nnoremap <C-Tab> :tabn<CR>
-" CTRL-Shift-Tab is Previous tab
-nnoremap <C-S-Tab> :tabp<CR>
-" CTRL-F4 is :tabclose
-nnoremap <C-F4> :tabc<CR>
+nmap <C-Tab> :tabp<CR>
 nmap <leader>tw :tabnew<CR>
 " -------------------
 
-noremap * *N
 nmap e ea
 
 colorscheme evening
@@ -85,9 +79,37 @@ Plugin 'mbbill/undotree'          " Undotree for buffer with diff
 Plugin 'tpope/vim-dispatch'       " Async `make` command
 Plugin 'godlygeek/tabular'        " :Tab /{pattern} to align lines usign {pattern}
 Plugin 'tpope/vim-fugitive'       " Git wrapper for Vim
+Plugin 'Shougo/neocomplete.vim'   " Syntax completion on the fly
+Plugin 'racer-rust/vim-racer'     " Rust-lang completion engine
+Plugin 'jremmen/vim-ripgrep'      " Plugin for ripgrep CL utility
+Plugin 'majutsushi/tagbar'        " Tagbar support
 
 call vundle#end()
 filetype plugin indent on
+
+" Tagbar
+let g:tagbar_ctags_bin='ctags'
+nmap <F8> :TagbarToggle<CR>
+ let g:tagbar_type_rust = {
+     \ 'ctagstype' : 'rust',
+     \ 'kinds' : [
+         \'T:types,type definitions',
+         \'f:functions,function definitions',
+         \'g:enum,enumeration names',
+         \'s:structure names',
+         \'m:modules,module names',
+         \'c:consts,static constants',
+         \'t:traits,traits',
+         \'i:impls,trait implementations',
+     \]
+     \}
+
+" Racer
+let g:racer_cmd = '$USERPROFILE/.cargo/bin/racer'
+let $RUST_SRC_PATH = "E:/Program/RustSourceCode/rust/src/"
+
+" Neocomplete
+let g:neocomplete#enable_at_startup = 1
 
 " Fugitive
 nnoremap <leader>gs :Gstatus<CR>
@@ -105,9 +127,19 @@ let NERDTreeHighlightCursorline=1
 let NERDTreeIgnore = ['tmp', '.yardoc', 'pkg']
 
 " Ctrl-P
-set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe,*.suo,*.sln,*.csproj,*.pdb,*.dll,*.cache,*.config,*.user,*.mdf,*.ldf,*.psm1,*.nupkg,*.psd1,*.manifest,*.ps1,*.transform
-set wildignore+=*.csproj.*
+set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe,*.suo,*.sln,*.csproj,*.pdb,*.dll,*.cache,*.config,*.user,*.mdf,*.ldf,*.psm1,*.nupkg,*.psd1,*.manifest,*.ps1,*.transform,*.csproj.*
+set wildignore+=*\\target\\*
 "set wildignore+=*.xml
+
+" Syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 " +---------------------------+
 " |                           |
@@ -121,7 +153,9 @@ autocmd BufRead,BufNewFile *.rs call SetupRustCompiler()
 autocmd BufWrite,BufWritePost _vimrc source $MYVIMRC
 
 function! CSSnippensSet()
-   compiler cs
+   " To create CS project, you need to exec `dotnet new` in project folder
+   " Than `dotnet restore` to initialize project dependencies
+   " After that, you can `dotnet build` and `dotnet run` solution
 
    " constructor snippet for c# ("ctor"<Space>)
    iab ctor public <C-c>?class<CR>wye''A<C-r>0()<CR>{<CR>}<C-c>ko
@@ -133,15 +167,12 @@ function! CSSnippensSet()
 
    set tabstop=4
    set shiftwidth=4
-
-   nnoremap <silent><F7> :Make<CR>
-   nnoremap <silent><F5> :make<CR>:cexpr system(expand("%:r") . ".exe")<CR>:copen<CR>
 endfunction
 
 function! SetupRustCompiler()
    compiler cargo
    nnoremap <silent><F7> :Make build<CR>
-   nnoremap <silent><F5> :make run<CR>:copen<CR>
+   nnoremap <silent><F5> :Make run<CR>
 endfunction
 
 set directory=.,$TEMP
