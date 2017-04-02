@@ -1,7 +1,7 @@
 set nocompatible
 syntax on
-set tabstop=3
-set shiftwidth=3
+set tabstop=4
+set shiftwidth=4
 set expandtab
 set nu
 set rnu
@@ -25,14 +25,15 @@ let mapleader=","
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
 
-nmap <silent> <leader>h :set hls!<CR>
+nmap <silent><leader>h :set hls!<CR>
 " Toggle spell check on and off 
-nmap <silent> <leader>s :set spell!<CR>
-nmap <silent> <leader>v :tabnew ~/_vimrc<CR>
+nmap <silent><leader>s :set spell!<CR>
+nmap <silent><leader>v :tabnew ~/_vimrc<CR>
 " Reselect last selected text (it doesn't care where it is)
 nmap gV `[v`] 
 " Toggle fold (open|close)
 nnoremap <Space> za
+nmap <silent><F4> :call ToggleQuickFix()<CR>
 
 " Switch between panes
 noremap <C-h> <C-w>h
@@ -73,7 +74,6 @@ Plugin 'gmarik/Vundle.vim'        " Package manager itself
 Plugin 'rust-lang/rust.vim'       " Rust syntax highlighting
 Plugin 'scrooloose/nerdtree'      " Directory tree
 Plugin 'scrooloose/nerdcommenter' " Plugin that's allow to comment
-Plugin 'scrooloose/syntastic'     " Syntax checker
 Plugin 'kien/ctrlp.vim'           " Fuzzy search files
 Plugin 'mbbill/undotree'          " Undotree for buffer with diff
 Plugin 'tpope/vim-dispatch'       " Async `make` command
@@ -83,13 +83,14 @@ Plugin 'Shougo/neocomplete.vim'   " Syntax completion on the fly
 Plugin 'racer-rust/vim-racer'     " Rust-lang completion engine
 Plugin 'jremmen/vim-ripgrep'      " Plugin for ripgrep CL utility
 Plugin 'majutsushi/tagbar'        " Tagbar support
+Plugin 'cespare/vim-toml'         " Toml syntax
 
 call vundle#end()
 filetype plugin indent on
 
 " Tagbar
 let g:tagbar_ctags_bin='ctags'
-nmap <F8> :TagbarToggle<CR>
+nmap <silent><F8> :TagbarToggle<CR>
  let g:tagbar_type_rust = {
      \ 'ctagstype' : 'rust',
      \ 'kinds' : [
@@ -107,13 +108,19 @@ nmap <F8> :TagbarToggle<CR>
 " Racer
 let g:racer_cmd = '$USERPROFILE/.cargo/bin/racer'
 let $RUST_SRC_PATH = "E:/Program/RustSourceCode/rust/src/"
+let g:racer_experimental_completer = 1
+
+au FileType rust nmap gd <Plug>(rust-def)
+au FileType rust nmap gs <Plug>(rust-def-split)
+au FileType rust nmap gx <Plug>(rust-def-vertical)
+au FileType rust nmap <leader>gd <Plug>(rust-doc)
 
 " Neocomplete
 let g:neocomplete#enable_at_startup = 1
 
 " Fugitive
 nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gc :Gcommit -a<CR>
+nnoremap <leader>gc :Gcommit<CR>
 nnoremap <leader>gp :Gpush<CR>
 nnoremap <leader>gd :Gdiff<CR>
 
@@ -121,25 +128,14 @@ nnoremap <leader>gd :Gdiff<CR>
 nnoremap <C-F5> :UndotreeToggle<CR>
 
 " NERDTree
-nmap <F2> :NERDTree<CR>
-nmap <F3> :NERDTreeClose<CR>
+nmap <silent><F2> :NERDTreeToggle<CR>
 let NERDTreeHighlightCursorline=1
-let NERDTreeIgnore = ['tmp', '.yardoc', 'pkg']
+let NERDTreeIgnore = ['tmp', '.yardoc', 'pkg', 'target']
 
 " Ctrl-P
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe,*.suo,*.sln,*.csproj,*.pdb,*.dll,*.cache,*.config,*.user,*.mdf,*.ldf,*.psm1,*.nupkg,*.psd1,*.manifest,*.ps1,*.transform,*.csproj.*
 set wildignore+=*\\target\\*
 "set wildignore+=*.xml
-
-" Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
 
 " +---------------------------+
 " |                           |
@@ -147,13 +143,13 @@ let g:syntastic_check_on_wq = 0
 " |                           |
 " +---------------------------+
 
-autocmd BufRead,BufNewFile *.cs call CSSnippensSet()
-autocmd BufRead,BufNewFile *.rs call SetupRustCompiler()
+au FileType cs call CSSnippensSet()
+au FileType rust call SetupRustCompiler()
 " Apply any changes when .vimrc is saved
-autocmd BufWrite,BufWritePost _vimrc source $MYVIMRC
+au BufWrite,BufWritePost _vimrc source $MYVIMRC
 
 function! CSSnippensSet()
-   " To create CS project, you need to exec `dotnet new` in project folder
+   " To create .NET Core project, you need to exec `dotnet new` in project folder
    " Than `dotnet restore` to initialize project dependencies
    " After that, you can `dotnet build` and `dotnet run` solution
 
@@ -164,9 +160,6 @@ function! CSSnippensSet()
    iab cw Console.WriteLine();<C-c>hi
    iab cr Console.ReadKey();<C-c>
    iab prop public TYPE NAME { get; set; }<C-c>FT
-
-   set tabstop=4
-   set shiftwidth=4
 endfunction
 
 function! SetupRustCompiler()
@@ -175,4 +168,20 @@ function! SetupRustCompiler()
    nnoremap <silent><F5> :Make run<CR>
 endfunction
 
+let g:quickfixstate = 0
+function! ToggleQuickFix()
+    if !exists("g:quickfixstate")
+        let g:quickfixstate = 0
+    endif
+
+    if g:quickfixstate == 0
+        let g:quickfixstate = 1
+        copen
+    else
+        let g:quickfixstate = 0
+        ccl
+    endif
+endfunction
+
 set directory=.,$TEMP
+
