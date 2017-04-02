@@ -19,6 +19,10 @@ set autochdir
 set fileencodings=utf-8,cp1251,cp866,koi8-r
 set lines=50 columns=200
 
+if has("gui_running")
+    colorscheme evening
+endif
+
 let mapleader=","
 
 " Set default omni completion for SQL, PHP, JavaScript, CSS, HTML
@@ -55,8 +59,6 @@ nmap <leader>tw :tabnew<CR>
 " -------------------
 
 nmap e ea
-
-colorscheme evening
 
 set colorcolumn=80
 highlight ColorColumn guibg=darkgray
