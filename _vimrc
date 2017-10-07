@@ -21,6 +21,7 @@ set lines=50 columns=200
 
 if has("gui_running")
     colorscheme evening
+    "set shell=powershell
 endif
 
 let mapleader=","
@@ -32,7 +33,7 @@ set omnifunc=syntaxcomplete#Complete
 nmap <silent><leader>h :set hls!<CR>
 " Toggle spell check on and off 
 nmap <silent><leader>s :set spell!<CR>
-nmap <silent><leader>v :tabnew ~/_vimrc<CR>
+nmap <silent><leader>v :tabnew $MYVIMRC<CR>
 " Reselect last selected text (it doesn't care where it is)
 nmap gV `[v`] 
 " Toggle fold (open|close)
@@ -166,7 +167,7 @@ endfunction
 
 function! SetupRustCompiler()
    compiler cargo
-   nnoremap <silent><F7> :Make build<CR>
+   nnoremap <silent><F7> :Make check<CR>
    nnoremap <silent><F5> :Make run<CR>
 endfunction
 
