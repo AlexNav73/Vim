@@ -18,6 +18,8 @@ set hidden
 set autochdir
 set fileencodings=utf-8,cp1251,cp866,koi8-r
 set lines=50 columns=200
+set fdc=1
+set scrolloff=2
 
 let mapleader=","
 
@@ -27,9 +29,11 @@ nmap <silent><leader>s :set spell!<CR>
 nmap <silent><leader>v :tabnew $MYVIMRC<CR>
 " Reselect last selected text (it doesn't care where it is)
 nmap gV `[v`] 
+nmap <silent><F4> :call ToggleQuickFix()<CR>
 " Toggle fold (open|close)
 nnoremap <Space> za
-nmap <silent><F4> :call ToggleQuickFix()<CR>
+noremap H ^
+noremap L $
 
 " Switch between panes
 noremap <C-h> <C-w>h
@@ -55,6 +59,7 @@ nmap e ea
 set colorcolumn=80
 highlight ColorColumn guibg=darkgray
 
+" Plugin section
 call plug#begin('$USERPROFILE/AppData/nvim/plugged')
 
 Plug 'rust-lang/rust.vim'       " Rust syntax highlighting
@@ -67,8 +72,11 @@ Plug 'tpope/vim-fugitive'       " Git wrapper for Vim
 Plug 'jremmen/vim-ripgrep'      " Plugin for ripgrep CL utility
 Plug 'cespare/vim-toml'         " Toml syntax
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 Plug 'sebastianmarkow/deoplete-rust'
+Plug 'neomake/neomake'
+Plug 'terryma/vim-multiple-cursors'
+
+" Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 
 call plug#end()
 
@@ -106,6 +114,9 @@ let g:deoplete#enable_at_startup=1
 " deoplete rust
 let g:deoplete#sources#rust#rust_source_path='E:\Program\RustSourceCode\rust\src'
 let g:deoplete#sources#rust#racer_binary='racer'
+
+" neomake
+call neomake#configure#automake('nw', 750)
 
 au FileType rust call SetupRustCompiler()
 
