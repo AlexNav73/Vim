@@ -72,11 +72,9 @@ Plug 'tpope/vim-fugitive'       " Git wrapper for Vim
 Plug 'jremmen/vim-ripgrep'      " Plugin for ripgrep CL utility
 Plug 'cespare/vim-toml'         " Toml syntax
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'sebastianmarkow/deoplete-rust'
+Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 Plug 'neomake/neomake'
 Plug 'terryma/vim-multiple-cursors'
-
-" Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 
 call plug#end()
 
@@ -103,28 +101,17 @@ nnoremap <leader>gd :Gdiff<CR>
 let g:deoplete#enable_at_startup=1
 
 " LSP
-" let g:LanguageClient_serverCommands = {
-"     \ 'rust': ['rustup', 'run', 'nightly', 'rls']
-" \ }
-" let g:LanguageClient_autoStart = 1 " Automatically start language servers.
-" nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-" nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-" nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-
-" deoplete rust
-let g:deoplete#sources#rust#rust_source_path='E:\Program\RustSourceCode\rust\src'
-let g:deoplete#sources#rust#racer_binary='racer'
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'nightly-x86_64-pc-windows-msvc', 'rls']
+\ }
+" Automatically start language servers.
+let g:LanguageClient_autoStart=1
+nnoremap <silent>K :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent>gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent><F1> :call LanguageClient_textDocument_references()<CR>
 
 " neomake
 call neomake#configure#automake('nw', 750)
-
-au FileType rust call SetupRustCompiler()
-
-function! SetupRustCompiler()
-   compiler cargo
-   nnoremap <silent><F7> :Make check<CR>
-   nnoremap <silent><F5> :Make run<CR>
-endfunction
 
 let g:quickfixstate = 0
 function! ToggleQuickFix()
