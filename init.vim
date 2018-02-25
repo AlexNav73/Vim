@@ -20,6 +20,7 @@ set fileencodings=utf-8,cp1251,cp866,koi8-r
 set lines=50 columns=200
 set fdc=1
 set scrolloff=2
+set icm=split
 
 let mapleader=","
 
@@ -56,23 +57,24 @@ nmap <leader>tw :tabnew<CR>
 
 " Terminal settings
 tnoremap <C-[> <C-\><C-n>
-let g:terminal_color_0  = '#2e3436'
-let g:terminal_color_1  = '#cc0000'
-let g:terminal_color_2  = '#4e9a06'
-let g:terminal_color_3  = '#a000c4'
-let g:terminal_color_4  = '#3465a4'
-let g:terminal_color_5  = '#75507b'
-let g:terminal_color_6  = '#0b939b'
-let g:terminal_color_7  = '#d3d7cf'
-let g:terminal_color_8  = '#555753'
-let g:terminal_color_9  = '#ef2929'
-let g:terminal_color_10 = '#8ae234'
-let g:terminal_color_11 = '#fce94f'
-let g:terminal_color_12 = '#729fcf'
-let g:terminal_color_13 = '#ad7fa8'
-let g:terminal_color_14 = '#00f5e9'
-let g:terminal_color_15 = '#eeeeec'
-" -------------------
+nnoremap <leader>p :vnew term://powershell<CR>
+let g:terminal_color_0  = '#073642'
+let g:terminal_color_1  = '#dc322f'
+let g:terminal_color_2  = '#859900'
+let g:terminal_color_3  = '#b58900'
+let g:terminal_color_4  = '#268bd2'
+let g:terminal_color_5  = '#d33682'
+let g:terminal_color_6  = '#2aa198'
+let g:terminal_color_7  = '#eee8d5'
+let g:terminal_color_8  = '#002b36'
+let g:terminal_color_9  = '#cb4b16'
+let g:terminal_color_10 = '#586e75'
+let g:terminal_color_11 = '#657b83'
+let g:terminal_color_12 = '#839496'
+let g:terminal_color_13 = '#6c71c4'
+let g:terminal_color_14 = '#93a1a1'
+let g:terminal_color_15 = '#fdf6e3'
+" ----------------
 
 nmap e ea
 
@@ -93,7 +95,6 @@ Plug 'jremmen/vim-ripgrep'      " Plugin for ripgrep CL utility
 Plug 'cespare/vim-toml'         " Toml syntax
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
-Plug 'neomake/neomake'
 Plug 'terryma/vim-multiple-cursors'
 
 call plug#end()
@@ -119,10 +120,11 @@ nnoremap <leader>gd :Gdiff<CR>
 
 " deoplete
 let g:deoplete#enable_at_startup=1
+let g:python3_host_prog="C:/Python3/python"
 
 " LSP
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly-x86_64-pc-windows-msvc', 'rls']
+    \ 'rust': ['rustup', 'run', 'stable-x86_64-pc-windows-msvc', 'rls']
 \ }
 " Automatically start language servers.
 let g:LanguageClient_autoStart=1
@@ -130,20 +132,21 @@ nnoremap <silent>K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent>gd :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent><F1> :call LanguageClient_textDocument_references()<CR>
 
-" neomake
-call neomake#configure#automake('nw', 750)
-
 let g:quickfixstate = 0
 function! ToggleQuickFix()
-    if !exists("g:quickfixstate")
-        let g:quickfixstate = 0
-    endif
-
-    if g:quickfixstate == 0
-        let g:quickfixstate = 1
-        copen
+lua << EOF
+    local set_var, nvim_command = vim.api.nvim_set_var, vim.api.nvim_command
+    local quickfixstate = vim.api.nvim_get_var("quickfixstate")
+    if vim.api.nvim_call_function("exists", {"g:quickfixstate"}) ~= 0 then
+        if quickfixstate == 0 then
+            set_var("quickfixstate", 1)
+            nvim_command("copen")
+        else
+            set_var("quickfixstate", 0)
+            nvim_command("ccl")
+        end
     else
-        let g:quickfixstate = 0
-        ccl
-    endif
+        print("Global variable `g:quickfixstate` is not defined")
+    end
+EOF
 endfunction
