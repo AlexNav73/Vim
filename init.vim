@@ -21,6 +21,7 @@ set lines=50 columns=200
 set fdc=1
 set scrolloff=2
 set icm=split
+set termguicolors
 
 let mapleader=","
 
@@ -35,6 +36,11 @@ nmap <silent><F4> :call ToggleQuickFix()<CR>
 nnoremap <Space> za
 noremap H ^
 noremap L $
+
+if has('persistent_undo')
+    "let &undodir = expand('%:p:h') . '/undofiles/'
+    set udf
+endif
 
 " Switch between panes
 noremap <C-h> <C-w>h
@@ -57,23 +63,22 @@ nmap <leader>tw :tabnew<CR>
 
 " Terminal settings
 tnoremap <C-[> <C-\><C-n>
-nnoremap <leader>p :vnew term://powershell<CR>
-let g:terminal_color_0  = '#073642'
-let g:terminal_color_1  = '#dc322f'
-let g:terminal_color_2  = '#859900'
-let g:terminal_color_3  = '#b58900'
-let g:terminal_color_4  = '#268bd2'
-let g:terminal_color_5  = '#d33682'
-let g:terminal_color_6  = '#2aa198'
-let g:terminal_color_7  = '#eee8d5'
-let g:terminal_color_8  = '#002b36'
-let g:terminal_color_9  = '#cb4b16'
-let g:terminal_color_10 = '#586e75'
-let g:terminal_color_11 = '#657b83'
-let g:terminal_color_12 = '#839496'
-let g:terminal_color_13 = '#6c71c4'
-let g:terminal_color_14 = '#93a1a1'
-let g:terminal_color_15 = '#fdf6e3'
+" let g:terminal_color_0  = '#073642'
+" let g:terminal_color_1  = '#dc322f'
+" let g:terminal_color_2  = '#859900'
+" let g:terminal_color_3  = '#b58900'
+" let g:terminal_color_4  = '#268bd2'
+" let g:terminal_color_5  = '#d33682'
+" let g:terminal_color_6  = '#2aa198'
+" let g:terminal_color_7  = '#eee8d5'
+" let g:terminal_color_8  = '#002b36'
+" let g:terminal_color_9  = '#cb4b16'
+" let g:terminal_color_10 = '#586e75'
+" let g:terminal_color_11 = '#657b83'
+" let g:terminal_color_12 = '#839496'
+" let g:terminal_color_13 = '#6c71c4'
+" let g:terminal_color_14 = '#93a1a1'
+" let g:terminal_color_15 = '#fdf6e3'
 " ----------------
 
 nmap e ea
@@ -96,8 +101,16 @@ Plug 'cespare/vim-toml'         " Toml syntax
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 Plug 'terryma/vim-multiple-cursors'
+Plug 'itchyny/lightline.vim'    " Custom bottom bar
+Plug 'mhinz/vim-startify'       " Start page with MRU files and cow :)
+Plug 'chriskempson/base16-vim'  " Collection of the color themes
+Plug 'kassio/neoterm'           " Wrapper of some vim/neovim's :terminal functions
 
 call plug#end()
+
+" Colors
+set background=dark
+colorscheme base16-atelier-dune
 
 " NERDTree
 nmap <silent><F2> :NERDTreeToggle<CR>
@@ -126,11 +139,19 @@ let g:python3_host_prog="C:/Python3/python"
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'stable-x86_64-pc-windows-msvc', 'rls']
 \ }
-" Automatically start language servers.
-let g:LanguageClient_autoStart=1
+let g:LanguageClient_autoStart=1 " Automatically start language servers.
 nnoremap <silent>K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent>gd :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent><F1> :call LanguageClient_textDocument_references()<CR>
+nnoremap <silent><F3> :call LanguageClient_textDocument_rename()<CR>
+
+" rust.vim
+let g:rustfmt_autosave = 1
+let g:rust_fold = 1
+
+" NeoTerm
+let g:neoterm_shell = "powershell"
+nnoremap <silent> <leader>p :vertical botright Ttoggle<CR><C-w>l
 
 let g:quickfixstate = 0
 function! ToggleQuickFix()
