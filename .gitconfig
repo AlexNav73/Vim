@@ -1,9 +1,13 @@
 [user]
-	name  = AlexNav73
-	email = fifthhorseman@mail.ru
+	name = AlexNav73
+	email = alexandr.navitskiy@gmail.com
 [core]
-	editor = vim
+	editor = gvim
+	autocrlf = true
 [alias]
    s   = status
-   pom = push origin master
-   c   = commit -am
+   st  = stash
+   sp  = stash pop
+   co  = checkout
+   c   = commit
+   amd = commit --amend --no-edit
