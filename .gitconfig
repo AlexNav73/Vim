@@ -5,9 +5,9 @@
 	editor = gvim
 	autocrlf = true
 [alias]
-   s   = status
-   st  = stash
-   sp  = stash pop
-   co  = checkout
-   c   = commit
-   amd = commit --amend --no-edit
+	s   = status
+	st  = stash
+	sp  = stash pop
+	co  = checkout
+	c   = commit
+	amd = commit --amend --no-edit
