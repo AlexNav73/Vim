@@ -22,6 +22,7 @@ set fdc=1
 set scrolloff=2
 set icm=split
 set termguicolors
+set completeopt=menuone,noinsert,noselect
 
 let mapleader=","
 
@@ -98,13 +99,22 @@ Plug 'godlygeek/tabular'        " :Tab /{pattern} to align lines usign {pattern}
 Plug 'tpope/vim-fugitive'       " Git wrapper for Vim
 Plug 'jremmen/vim-ripgrep'      " Plugin for ripgrep CL utility
 Plug 'cespare/vim-toml'         " Toml syntax
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 Plug 'terryma/vim-multiple-cursors'
 Plug 'itchyny/lightline.vim'    " Custom bottom bar
 Plug 'mhinz/vim-startify'       " Start page with MRU files and cow :)
 Plug 'chriskempson/base16-vim'  " Collection of the color themes
 Plug 'kassio/neoterm'           " Wrapper of some vim/neovim's :terminal functions
+
+Plug 'neovim/nvim-lspconfig'    " Collection of configurations for built-in LSP client
+Plug 'saadparwaiz1/cmp_luasnip' " Snippets source for nvim-cmp
+Plug 'L3MON4D3/LuaSnip'         " Snippets plugin
+Plug 'simrat39/rust-tools.nvim'
+Plug 'hrsh7th/nvim-cmp'         " Autocompletion plugin
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/cmp-nvim-lsp'     " LSP source for nvim-cmp
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-buffer'
 
 call plug#end()
 
@@ -131,20 +141,6 @@ nnoremap <leader>gc :Gcommit<CR>
 nnoremap <leader>gp :Gpush<CR>
 nnoremap <leader>gd :Gdiff<CR>
 
-" deoplete
-let g:deoplete#enable_at_startup=1
-let g:python3_host_prog="C:/Python3/python"
-
-" LSP
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'stable-x86_64-pc-windows-msvc', 'rls']
-\ }
-let g:LanguageClient_autoStart=1 " Automatically start language servers.
-nnoremap <silent>K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent>gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent><F1> :call LanguageClient_textDocument_references()<CR>
-nnoremap <silent><F3> :call LanguageClient_textDocument_rename()<CR>
-
 " rust.vim
 let g:rustfmt_autosave = 1
 let g:rust_fold = 1
@@ -152,6 +148,91 @@ let g:rust_fold = 1
 " NeoTerm
 let g:neoterm_shell = "powershell"
 nnoremap <silent> <leader>p :vertical botright Ttoggle<CR><C-w>l
+
+" LSP hotkeys (https://sharksforarms.dev/posts/neovim-rust/)
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> ga    <cmd>lua vim.lsp.buf.code_action()<CR>
+
+" LSP config
+lua <<EOF
+    local nvim_lsp = require('lspconfig')
+
+    local opts = {
+        tools = { -- rust-tools options
+            autoSetHints = true,
+            hover_with_actions = true,
+            inlay_hints = {
+                show_parameter_hints = false,
+                parameter_hints_prefix = "",
+                other_hints_prefix = "",
+            },
+        },
+
+        -- all the opts to send to nvim-lspconfig
+        -- these override the defaults set by rust-tools.nvim
+        -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
+        server = {
+            -- on_attach is a callback called when the language server attachs to the buffer
+            -- on_attach = on_attach,
+            settings = {
+                -- to enable rust-analyzer settings visit:
+                -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+                ["rust-analyzer"] = {
+                    -- enable clippy on save
+                    checkOnSave = {
+                        command = "clippy"
+                    },
+                }
+            }
+        },
+    }
+
+    require('rust-tools').setup(opts)
+EOF
+
+" Autocompletion
+lua <<EOF
+    local cmp = require'cmp'
+    cmp.setup({
+      -- Enable LSP snippets
+      snippet = {
+        expand = function(args)
+            vim.fn["vsnip#anonymous"](args.body)
+        end,
+      },
+      mapping = {
+        ['<C-p>'] = cmp.mapping.select_prev_item(),
+        ['<C-n>'] = cmp.mapping.select_next_item(),
+        -- Add tab support
+        ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+        ['<Tab>'] = cmp.mapping.select_next_item(),
+        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.close(),
+        ['<CR>'] = cmp.mapping.confirm({
+          behavior = cmp.ConfirmBehavior.Insert,
+          select = true,
+        })
+      },
+
+      -- Installed sources
+      sources = {
+        { name = 'nvim_lsp' },
+        { name = 'vsnip' },
+        { name = 'path' },
+        { name = 'buffer' },
+      },
+    })
+EOF
 
 let g:quickfixstate = 0
 function! ToggleQuickFix()
