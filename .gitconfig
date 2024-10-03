@@ -1,13 +1,28 @@
 [user]
-	name = AlexNav73
-	email = alexandr.navitskiy@gmail.com
+    name = AlexNav73
+    email = alexandr.navitskiy@gmail.com
 [core]
-	editor = gvim
-	autocrlf = true
+    editor = nvim
+    autocrlf = true
+[diff]
+    tool = difftastic
+    external = difft
+[difftool]
+    prompt = false
+[difftool "difftastic"]
+    cmd = difft "$LOCAL" "$REMOTE"
+[pager]
+    difftool = true
 [alias]
-	s   = status
-	st  = stash
-	sp  = stash pop
-	co  = checkout
-	c   = commit
-	amd = commit --amend --no-edit
+    s   = status
+    st  = stash
+    sp  = stash pop
+    co  = checkout
+    c   = commit
+    amd = commit --amend --no-edit
+    dt  = difftool
+    mt  = mergetool
+[merge]
+    tool = nvimdiff
+[mergetool "nvimdiff"]
+    path = nvim
